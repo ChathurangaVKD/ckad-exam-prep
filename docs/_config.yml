@@ -1,0 +1,14 @@
+title: CKAD Exam Prep
+description: >-
+  Free, comprehensive CKAD (Certified Kubernetes Application Developer) exam
+  preparation guide covering all 5 CNCF curriculum domains with YAML manifests,
+  practice exams, kubectl cheatsheet, and a 2-week study plan.
+baseurl: "/ckad-exam-prep"
+url: "https://chathurangavkd.github.io"
+author: Dasun Chathuranga
+github_username: ChathurangaVKD
+show_downloads: false
+theme: minima
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap

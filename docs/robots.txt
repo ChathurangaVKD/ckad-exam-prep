@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://chathurangavkd.github.io/ckad-exam-prep/sitemap.xml

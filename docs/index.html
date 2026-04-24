@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Primary SEO Meta Tags -->
+  <title>CKAD Exam Prep | Free Kubernetes Developer Certification Study Guide 2026</title>
+  <meta name="title" content="CKAD Exam Prep | Free Kubernetes Developer Certification Study Guide 2026" />
+  <meta name="description" content="Free, comprehensive CKAD (Certified Kubernetes Application Developer) exam preparation guide. Covers all 5 domains: kubectl commands, YAML manifests, practice exams, Helm, NetworkPolicy, RBAC, Security Contexts and more. Pass the CNCF CKAD exam in 2 weeks." />
+  <meta name="keywords" content="CKAD exam prep, Certified Kubernetes Application Developer, CKAD study guide, CKAD practice exam, kubernetes certification 2026, CNCF CKAD, kubectl cheatsheet, kubernetes YAML, CKAD free course, kubernetes developer exam, CKAD tips, kubernetes pods, helm kubernetes, network policy kubernetes, RBAC kubernetes, kubernetes security context, CKAD v1.35" />
+  <meta name="author" content="Dasun Chathuranga" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://chathurangavkd.github.io/ckad-exam-prep/" />
+
+  <!-- Open Graph / Facebook / LinkedIn -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://chathurangavkd.github.io/ckad-exam-prep/" />
+  <meta property="og:title" content="CKAD Exam Prep | Free Kubernetes Developer Certification Study Guide 2026" />
+  <meta property="og:description" content="Free, comprehensive CKAD exam guide covering all 5 domains. 30+ practice questions with solutions, kubectl cheatsheet, YAML templates, 2-week study plan. Pass the CNCF CKAD exam!" />
+  <meta property="og:image" content="https://chathurangavkd.github.io/ckad-exam-prep/og-image.png" />
+  <meta property="og:site_name" content="CKAD Exam Prep" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://chathurangavkd.github.io/ckad-exam-prep/" />
+  <meta name="twitter:title" content="CKAD Exam Prep | Free Kubernetes Developer Certification Study Guide 2026" />
+  <meta name="twitter:description" content="Free CKAD exam guide. All 5 domains covered. 30+ practice questions, kubectl cheatsheet, YAML templates. Pass in 2 weeks!" />
+  <meta name="twitter:image" content="https://chathurangavkd.github.io/ckad-exam-prep/og-image.png" />
+  <meta name="twitter:creator" content="@ChathurangaVKD" />
+
+  <!-- Structured Data: WebSite -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "CKAD Exam Prep",
+    "url": "https://chathurangavkd.github.io/ckad-exam-prep/",
+    "description": "Free, comprehensive CKAD exam preparation guide covering all 5 CNCF curriculum domains.",
+    "author": {
+      "@type": "Person",
+      "name": "Dasun Chathuranga",
+      "url": "https://github.com/ChathurangaVKD"
+    },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://github.com/ChathurangaVKD/ckad-exam-prep/search?q={search_term}",
+      "query-input": "required name=search_term"
+    }
+  }
+  </script>
+
+  <!-- Structured Data: Course -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": "CKAD (Certified Kubernetes Application Developer) Exam Preparation",
+    "description": "A free, hands-on CKAD exam preparation guide covering all 5 domains of the CNCF CKAD curriculum v1.35. Includes YAML manifests, practice exams, and quick-reference cheatsheets.",
+    "provider": {
+      "@type": "Person",
+      "name": "Dasun Chathuranga",
+      "url": "https://github.com/ChathurangaVKD"
+    },
+    "url": "https://github.com/ChathurangaVKD/ckad-exam-prep",
+    "isAccessibleForFree": true,
+    "courseCode": "CKAD-v1.35",
+    "educationalLevel": "Intermediate",
+    "teaches": [
+      "Kubernetes Application Design and Build",
+      "Kubernetes Application Deployment",
+      "Kubernetes Observability and Maintenance",
+      "Kubernetes Security, Configuration and Environment",
+      "Kubernetes Services and Networking"
+    ],
+    "hasCourseInstance": {
+      "@type": "CourseInstance",
+      "courseMode": "online",
+      "courseWorkload": "PT14D"
+    }
+  }
+  </script>
+
+  <!-- Structured Data: FAQ (AEO - Answer Engine Optimization) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the CKAD exam?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The CKAD (Certified Kubernetes Application Developer) exam is a performance-based certification offered by the Cloud Native Computing Foundation (CNCF). It validates that candidates can design, build, configure, and expose cloud-native applications using Kubernetes. The exam is 2 hours long and requires a passing score of 66%."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What topics are covered in the CKAD exam?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The CKAD exam v1.35 covers 5 domains: (1) Application Design and Build (20%) - containers, jobs, multi-container pods, volumes; (2) Application Deployment (20%) - deployments, rolling updates, Helm, Kustomize; (3) Application Observability and Maintenance (15%) - probes, logging, debugging; (4) Application Environment, Configuration and Security (25%) - ConfigMaps, Secrets, RBAC, SecurityContext; (5) Services and Networking (20%) - services, ingress, network policies."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long does it take to prepare for the CKAD exam?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Most candidates prepare for the CKAD exam in 2-4 weeks with daily practice. With this study guide, you can follow a structured 2-week plan: Week 1 covers Application Design, Deployment, and Observability; Week 2 covers Security, Networking, and practice exams. Prior Kubernetes knowledge significantly reduces preparation time."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the CKAD exam passing score?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The CKAD exam passing score is 66%. The exam is 2 hours long and performance-based, meaning you complete real tasks in a live Kubernetes cluster rather than answering multiple-choice questions."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What kubectl commands are most important for the CKAD exam?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The most important kubectl commands for CKAD are: kubectl run (create pods), kubectl create deployment, kubectl expose (create services), kubectl create configmap/secret, kubectl create role/rolebinding, kubectl rollout (manage deployments), kubectl logs/exec/describe (debugging), and kubectl apply -f (apply YAML). Using --dry-run=client -o yaml to generate YAML templates is a key time-saving technique."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Are notes and documentation allowed during the CKAD exam?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes! During the CKAD exam, you are allowed to have one additional browser tab open with these approved resources: kubernetes.io/docs, kubernetes.io/blog, and helm.sh/docs. You cannot use any other external resources or notes."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is the difference between CKAD and CKA?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "CKAD (Certified Kubernetes Application Developer) focuses on building and deploying applications on Kubernetes - the developer perspective. CKA (Certified Kubernetes Administrator) focuses on cluster administration - installing, configuring, and managing Kubernetes clusters. CKAD covers topics like pods, deployments, services, configmaps, and security contexts. CKA covers cluster setup, networking, storage, and troubleshooting at the cluster level."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I create a Kubernetes pod quickly in the CKAD exam?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Use imperative commands to save time: 'kubectl run my-pod --image=nginx' creates a pod instantly. To generate YAML without creating: 'kubectl run my-pod --image=nginx --dry-run=client -o yaml > pod.yaml'. Set up the alias 'alias k=kubectl' and 'export do=--dry-run=client -o yaml' at the start of the exam."
+        }
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    :root {
+      --k8s-blue: #326CE5;
+      --dark: #0d1117;
+      --card-bg: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --green: #3fb950;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    a { color: var(--k8s-blue); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* NAV */
+    nav {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.1rem; color: var(--text); }
+    .nav-brand svg { width: 28px; height: 28px; }
+    .nav-links { display: flex; gap: 1.5rem; }
+    .nav-links a { color: var(--muted); font-size: 0.9rem; }
+    .nav-links a:hover { color: var(--text); text-decoration: none; }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 5rem 1.5rem 4rem;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(50,108,229,0.15) 0%, transparent 70%);
+    }
+    .badge-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 1.5rem; }
+    .badge { background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; padding: 4px 14px; font-size: 0.8rem; color: var(--muted); }
+    .badge.blue { border-color: var(--k8s-blue); color: var(--k8s-blue); }
+    .badge.green { border-color: var(--green); color: var(--green); }
+    .hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; margin-bottom: 1rem; line-height: 1.2; }
+    .hero h1 span { color: var(--k8s-blue); }
+    .hero p { font-size: 1.15rem; color: var(--muted); max-width: 640px; margin: 0 auto 2rem; }
+    .cta-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 12px 24px; border-radius: 8px;
+      font-size: 0.95rem; font-weight: 600; transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.85; text-decoration: none; }
+    .btn-primary { background: var(--k8s-blue); color: #fff; }
+    .btn-secondary { background: var(--card-bg); color: var(--text); border: 1px solid var(--border); }
+
+    /* STATS */
+    .stats {
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 1px;
+      background: var(--border); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .stat { background: var(--dark); padding: 1.5rem 2.5rem; text-align: center; flex: 1; min-width: 150px; }
+    .stat-num { font-size: 2rem; font-weight: 800; color: var(--k8s-blue); }
+    .stat-label { font-size: 0.85rem; color: var(--muted); margin-top: 4px; }
+
+    /* SECTIONS */
+    section { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem; }
+    h2 { font-size: 1.7rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .section-sub { color: var(--muted); margin-bottom: 2.5rem; font-size: 1rem; }
+
+    /* DOMAINS GRID */
+    .domains-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+    .domain-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 12px; padding: 1.5rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .domain-card:hover { border-color: var(--k8s-blue); transform: translateY(-2px); }
+    .domain-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
+    .domain-title { font-size: 1rem; font-weight: 700; }
+    .domain-weight { background: rgba(50,108,229,0.15); color: var(--k8s-blue); border-radius: 6px; padding: 2px 10px; font-size: 0.8rem; font-weight: 700; }
+    .domain-topics { list-style: none; }
+    .domain-topics li { padding: 4px 0; color: var(--muted); font-size: 0.9rem; }
+    .domain-topics li::before { content: "•  "; color: var(--k8s-blue); }
+
+    /* FEATURES */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+    .feature-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+    .feature-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .feature-card p { color: var(--muted); font-size: 0.9rem; }
+
+    /* EXAM DAY */
+    .exam-box {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 12px; padding: 2rem;
+    }
+    .exam-box pre {
+      background: #0d1117; border: 1px solid var(--border); border-radius: 8px;
+      padding: 1rem; overflow-x: auto; font-size: 0.85rem; color: #a5d6ff;
+      margin-top: 1rem;
+    }
+
+    /* PRACTICE EXAMS */
+    .exams-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+    .exam-card {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem;
+    }
+    .exam-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .exam-card p { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .stars { color: #f5c518; font-size: 0.9rem; }
+
+    /* FAQ */
+    .faq-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); border-radius: 12px; overflow: hidden; }
+    details {
+      background: var(--card-bg); padding: 1.25rem 1.5rem;
+    }
+    details + details { border-top: 1px solid var(--border); }
+    summary {
+      cursor: pointer; font-weight: 600; font-size: 0.97rem;
+      list-style: none; display: flex; justify-content: space-between; align-items: center;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; color: var(--k8s-blue); font-size: 1.3rem; font-weight: 300; }
+    details[open] summary::after { content: "−"; }
+    details p { color: var(--muted); margin-top: 0.75rem; font-size: 0.92rem; line-height: 1.7; }
+
+    /* STUDY PLAN */
+    .plan-table { width: 100%; border-collapse: collapse; }
+    .plan-table th, .plan-table td { padding: 10px 14px; border: 1px solid var(--border); font-size: 0.9rem; text-align: left; }
+    .plan-table th { background: var(--card-bg); color: var(--muted); font-weight: 600; }
+    .plan-table tr:hover td { background: var(--card-bg); }
+
+    /* FOOTER */
+    footer {
+      text-align: center; padding: 3rem 1.5rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted); font-size: 0.9rem;
+    }
+    footer a { color: var(--k8s-blue); }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .hero { padding: 3rem 1rem 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="/">
+    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="16" cy="16" r="16" fill="#326CE5"/>
+      <path d="M16 5.5L7 10.5V21.5L16 26.5L25 21.5V10.5L16 5.5Z" stroke="white" stroke-width="1.5" fill="none"/>
+      <circle cx="16" cy="16" r="3" fill="white"/>
+    </svg>
+    CKAD Exam Prep
+  </a>
+  <div class="nav-links">
+    <a href="#domains">Domains</a>
+    <a href="#practice">Practice</a>
+    <a href="#study-plan">Study Plan</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://github.com/ChathurangaVKD/ckad-exam-prep">GitHub</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="badge-row">
+    <span class="badge blue">CKAD v1.35</span>
+    <span class="badge green">Free &amp; Open Source</span>
+    <span class="badge">Kubernetes</span>
+    <span class="badge">CNCF Certified</span>
+    <span class="badge">2026 Updated</span>
+  </div>
+  <h1>Pass the <span>CKAD Exam</span><br/>with Confidence</h1>
+  <p>The most comprehensive free CKAD study guide — covering all 5 exam domains with hands-on YAML manifests, 30+ practice questions, kubectl cheatsheet, and a proven 2-week study plan.</p>
+  <div class="cta-row">
+    <a href="https://github.com/ChathurangaVKD/ckad-exam-prep" class="btn btn-primary">
+      ⭐ Star on GitHub
+    </a>
+    <a href="https://github.com/ChathurangaVKD/ckad-exam-prep#-curriculum-domains" class="btn btn-secondary">
+      📚 Start Learning
+    </a>
+  </div>
+</header>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat"><div class="stat-num">5</div><div class="stat-label">Exam Domains Covered</div></div>
+  <div class="stat"><div class="stat-num">30+</div><div class="stat-label">Practice Questions</div></div>
+  <div class="stat"><div class="stat-num">50+</div><div class="stat-label">YAML Manifests</div></div>
+  <div class="stat"><div class="stat-num">66%</div><div class="stat-label">Passing Score Required</div></div>
+  <div class="stat"><div class="stat-num">2h</div><div class="stat-label">Exam Duration</div></div>
+  <div class="stat"><div class="stat-num">14</div><div class="stat-label">Day Study Plan</div></div>
+</div>
+
+<!-- DOMAINS -->
+<section id="domains">
+  <h2>📚 All 5 CKAD Exam Domains</h2>
+  <p class="section-sub">Aligned with the official CNCF CKAD Curriculum v1.35</p>
+  <div class="domains-grid">
+    <div class="domain-card">
+      <div class="domain-header">
+        <span class="domain-title">🐳 Application Design and Build</span>
+        <span class="domain-weight">20%</span>
+      </div>
+      <ul class="domain-topics">
+        <li>Container images &amp; Dockerfiles</li>
+        <li>Multi-stage builds</li>
+        <li>Jobs and CronJobs</li>
+        <li>Sidecar, Ambassador, Adapter patterns</li>
+        <li>Init Containers</li>
+        <li>Volumes: emptyDir, hostPath, PVC</li>
+      </ul>
+    </div>
+    <div class="domain-card">
+      <div class="domain-header">
+        <span class="domain-title">🚀 Application Deployment</span>
+        <span class="domain-weight">20%</span>
+      </div>
+      <ul class="domain-topics">
+        <li>Deployments and rolling updates</li>
+        <li>Blue-Green and Canary deployments</li>
+        <li>DaemonSets and StatefulSets</li>
+        <li>Helm package manager</li>
+        <li>Kustomize overlays</li>
+        <li>Rollback strategies</li>
+      </ul>
+    </div>
+    <div class="domain-card">
+      <div class="domain-header">
+        <span class="domain-title">🔭 Observability &amp; Maintenance</span>
+        <span class="domain-weight">15%</span>
+      </div>
+      <ul class="domain-topics">
+        <li>Liveness, Readiness, Startup probes</li>
+        <li>kubectl logs and debugging</li>
+        <li>kubectl top (monitoring)</li>
+        <li>Ephemeral debug containers</li>
+        <li>API deprecations</li>
+      </ul>
+    </div>
+    <div class="domain-card">
+      <div class="domain-header">
+        <span class="domain-title">🔐 Environment, Config &amp; Security</span>
+        <span class="domain-weight">25%</span>
+      </div>
+      <ul class="domain-topics">
+        <li>ConfigMaps and Secrets</li>
+        <li>SecurityContext and capabilities</li>
+        <li>ServiceAccounts and RBAC</li>
+        <li>Resource requests and limits</li>
+        <li>LimitRange and ResourceQuota</li>
+        <li>Custom Resource Definitions</li>
+      </ul>
+    </div>
+    <div class="domain-card">
+      <div class="domain-header">
+        <span class="domain-title">🌐 Services and Networking</span>
+        <span class="domain-weight">20%</span>
+      </div>
+      <ul class="domain-topics">
+        <li>ClusterIP, NodePort, LoadBalancer</li>
+        <li>DNS resolution patterns</li>
+        <li>Ingress with path and TLS routing</li>
+        <li>NetworkPolicy (ingress/egress)</li>
+        <li>Service troubleshooting</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section>
+  <h2>✨ What's Inside</h2>
+  <p class="section-sub">Everything you need to pass CKAD — for free</p>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">📄</div>
+      <h3>50+ YAML Manifests</h3>
+      <p>Ready-to-apply Kubernetes YAML for every resource type: pods, deployments, services, ingress, RBAC, network policies and more.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>Imperative Commands</h3>
+      <p>Every kubectl imperative command you need. Faster than writing YAML — critical for saving time on exam day.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧪</div>
+      <h3>3 Practice Exams</h3>
+      <p>30+ exam-style questions with hidden solutions, score tracking, and full explanations — from medium to expert difficulty.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📋</div>
+      <h3>kubectl Cheatsheet</h3>
+      <p>Every kubectl command organized by resource type. The only reference you need on exam day — one file, all commands.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📝</div>
+      <h3>YAML Templates</h3>
+      <p>Copy-paste YAML templates for all Kubernetes resources. Generate boilerplate in seconds with --dry-run=client -o yaml tips.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <h3>Exam Tips</h3>
+      <p>Time management strategy, common mistakes to avoid, allowed bookmarks list, and a domain-by-domain readiness checklist.</p>
+    </div>
+  </div>
+</section>
+
+<!-- EXAM DAY SETUP -->
+<section>
+  <h2>⚡ Exam Day Setup</h2>
+  <p class="section-sub">Run these commands immediately when your exam starts</p>
+  <div class="exam-box">
+    <p style="color: var(--muted); font-size: 0.9rem;">Copy-paste these aliases and shortcuts at the start of every exam session to save time:</p>
+    <pre><code># Set up aliases (do this FIRST)
+alias k=kubectl
+export do="--dry-run=client -o yaml"
+export now="--force --grace-period 0"
+source &lt;(kubectl completion bash)
+complete -F __start_kubectl k
+
+# Usage examples
+k run pod1 --image=nginx $do &gt; pod1.yaml   # Generate YAML
+k delete pod pod1 $now                       # Force delete
+k get pods -A                                # All namespaces</code></pre>
+  </div>
+</section>
+
+<!-- PRACTICE EXAMS -->
+<section id="practice">
+  <h2>🧪 Practice Exams</h2>
+  <p class="section-sub">Timed, exam-style questions with hidden solutions</p>
+  <div class="exams-grid">
+    <div class="exam-card">
+      <h3>Practice Exam 1</h3>
+      <div class="stars">⭐⭐⭐</div>
+      <p>12 questions covering core concepts across all 5 domains. Pod creation, ConfigMaps, Secrets, Deployments, Jobs, CronJobs, Security Contexts, Services, Ingress, RBAC, NetworkPolicy, Probes.</p>
+      <a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/practice-exams/exam-01/README.md" class="btn btn-secondary" style="font-size:0.85rem;padding:8px 16px;">Start Exam →</a>
+    </div>
+    <div class="exam-card">
+      <h3>Practice Exam 2</h3>
+      <div class="stars">⭐⭐⭐⭐</div>
+      <p>10 advanced questions: PVCs, Helm, Kustomize, DaemonSets, ResourceQuotas, network debugging, canary deployments, shared volumes, and labels/selectors.</p>
+      <a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/practice-exams/exam-02/README.md" class="btn btn-secondary" style="font-size:0.85rem;padding:8px 16px;">Start Exam →</a>
+    </div>
+    <div class="exam-card">
+      <h3>Practice Exam 3 — Hard Mode</h3>
+      <div class="stars">⭐⭐⭐⭐⭐</div>
+      <p>8 expert-level questions: Full-stack 3-tier app deployment, complex RBAC, StatefulSets, complete secret workflows, NetworkPolicy scenarios, and troubleshooting broken deployments.</p>
+      <a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/practice-exams/exam-03/README.md" class="btn btn-secondary" style="font-size:0.85rem;padding:8px 16px;">Start Exam →</a>
+    </div>
+  </div>
+</section>
+
+<!-- STUDY PLAN -->
+<section id="study-plan">
+  <h2>📅 2-Week Study Plan</h2>
+  <p class="section-sub">A structured plan to pass CKAD in 14 days</p>
+  <table class="plan-table">
+    <thead>
+      <tr><th>Week</th><th>Days</th><th>Focus Area</th><th>Resource</th></tr>
+    </thead>
+    <tbody>
+      <tr><td rowspan="4"><strong>Week 1</strong></td><td>Day 1–2</td><td>Domain 1: Application Design &amp; Build</td><td><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/01-application-design-build/README.md">Guide →</a></td></tr>
+      <tr><td>Day 3–4</td><td>Domain 2: Deployments, Helm, Kustomize</td><td><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/02-application-deployment/README.md">Guide →</a></td></tr>
+      <tr><td>Day 5</td><td>Domain 3: Observability &amp; Debugging</td><td><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/03-observability-maintenance/README.md">Guide →</a></td></tr>
+      <tr><td>Day 6–7</td><td>Practice Exam 1 + review mistakes</td><td><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/practice-exams/exam-01/README.md">Exam →</a></td></tr>
+      <tr><td rowspan="4"><strong>Week 2</strong></td><td>Day 8–9</td><td>Domain 4: Config, Secrets, Security, RBAC</td><td><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/04-environment-config-security/README.md">Guide →</a></td></tr>
+      <tr><td>Day 10–11</td><td>Domain 5: Services &amp; Networking</td><td><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/05-services-networking/README.md">Guide →</a></td></tr>
+      <tr><td>Day 12–13</td><td>Practice Exams 2 &amp; 3 (Hard Mode)</td><td><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/practice-exams/exam-02/README.md">Exam →</a></td></tr>
+      <tr><td>Day 14</td><td>Quick Reference review + rest</td><td><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/quick-reference/exam-tips.md">Tips →</a></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- FAQ (AEO) -->
+<section id="faq">
+  <h2>❓ Frequently Asked Questions</h2>
+  <p class="section-sub">Common questions about the CKAD exam — optimized for search and AI assistants</p>
+  <div class="faq-list">
+    <details>
+      <summary>What is the CKAD exam?</summary>
+      <p>The CKAD (Certified Kubernetes Application Developer) exam is a performance-based certification by the Cloud Native Computing Foundation (CNCF). It validates that candidates can design, build, configure, and expose cloud-native applications on Kubernetes. The exam is 2 hours long and requires a 66% passing score. There are no multiple-choice questions — you complete real tasks in a live Kubernetes cluster.</p>
+    </details>
+    <details>
+      <summary>What are the 5 CKAD exam domains and their weights?</summary>
+      <p>The CKAD v1.35 curriculum has 5 domains: (1) Application Design and Build — 20%; (2) Application Deployment — 20%; (3) Application Observability and Maintenance — 15%; (4) Application Environment, Configuration and Security — 25%; (5) Services and Networking — 20%. Domain 4 (Security) has the highest weight at 25% and should be prioritized.</p>
+    </details>
+    <details>
+      <summary>How long does it take to prepare for CKAD?</summary>
+      <p>With a structured approach, most candidates prepare in 2–4 weeks. This guide provides a 14-day plan. Prior Kubernetes experience can reduce this. Daily hands-on practice is essential since the exam is performance-based — you must type commands in a live cluster, not answer theory questions.</p>
+    </details>
+    <details>
+      <summary>What documentation is allowed during the CKAD exam?</summary>
+      <p>You may have ONE additional browser tab open with these approved resources only: kubernetes.io/docs, kubernetes.io/blog, and helm.sh/docs. No personal notes, no other websites. The kubectl cheatsheet at kubernetes.io/docs/reference/kubectl/cheatsheet/ is very helpful.</p>
+    </details>
+    <details>
+      <summary>What kubectl commands are most important for CKAD?</summary>
+      <p>The top commands: kubectl run (pods), kubectl create deployment, kubectl expose (services), kubectl create configmap/secret, kubectl create role/rolebinding, kubectl set image (updates), kubectl rollout (manage rollouts), kubectl logs/exec/describe (debugging). Key tip: use <code>--dry-run=client -o yaml</code> to generate YAML templates instantly.</p>
+    </details>
+    <details>
+      <summary>What is the CKAD exam passing score?</summary>
+      <p>The CKAD passing score is 66%. The exam purchase includes one free retake. Results are available within 24 hours. The exam is proctored online — you need a webcam, microphone, and a clean desk environment.</p>
+    </details>
+    <details>
+      <summary>What is the difference between CKAD and CKA?</summary>
+      <p>CKAD targets application developers who build and deploy apps on Kubernetes. CKA targets cluster administrators who install and manage Kubernetes infrastructure. CKAD focuses on pods, deployments, services, configmaps, and security. CKA focuses on cluster setup, networking (CNI), storage, etcd backups, and cluster upgrades. Many people pursue CKAD before CKA.</p>
+    </details>
+    <details>
+      <summary>Is kubectl cheatsheet helpful for CKAD?</summary>
+      <p>Yes! The kubectl cheatsheet at kubernetes.io/docs/reference/kubectl/cheatsheet/ is allowed during the exam and extremely useful. This repo also includes a comprehensive cheatsheet covering every command by resource type, aliases to set up on exam day, JSONPath output examples, and Helm commands.</p>
+    </details>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p style="font-size: 1.2rem; margin-bottom: 0.5rem;">⭐ Found this helpful? Star the repo!</p>
+  <p><a href="https://github.com/ChathurangaVKD/ckad-exam-prep">github.com/ChathurangaVKD/ckad-exam-prep</a></p>
+  <br/>
+  <p>Made with ❤️ by <a href="https://github.com/ChathurangaVKD">Dasun Chathuranga</a> &nbsp;|&nbsp; MIT License &nbsp;|&nbsp; Aligned with <a href="https://github.com/cncf/curriculum">CNCF CKAD Curriculum v1.35</a></p>
+  <br/>
+  <p style="font-size: 0.8rem; color: #484f58;">CKAD™ is a trademark of the Linux Foundation. This is an independent, community study resource and is not affiliated with or endorsed by CNCF or the Linux Foundation.</p>
+</footer>
+
+</body>
+</html>
