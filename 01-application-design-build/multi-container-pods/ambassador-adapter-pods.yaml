@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ambassador-example
+  labels:
+    pattern: ambassador
+spec:
+  containers:
+  # Main app connects to localhost:5432 (the ambassador)
+  - name: app
+    image: busybox
+    command: ["sleep", "3600"]
+    env:
+    - name: DB_HOST
+      value: "localhost"
+    - name: DB_PORT
+      value: "5432"
+  # Ambassador: proxies and handles connection pooling, retries, etc.
+  - name: db-proxy
+    image: haproxy:2.8-alpine
+    ports:
+    - containerPort: 5432
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: adapter-example
+  labels:
+    pattern: adapter
+spec:
+  volumes:
+  - name: shared-logs
+    emptyDir: {}
+  containers:
+  # Legacy app: writes logs in non-standard format
+  - name: legacy-app
+    image: busybox
+    command: ["/bin/sh", "-c",
+      "while true; do echo \"$(date)|INFO|Request processed\"; sleep 5; done > /logs/app.log"]
+    volumeMounts:
+    - name: shared-logs
+      mountPath: /logs
+  # Adapter: transforms legacy format → standard JSON format
+  - name: log-adapter
+    image: busybox
+    command: ["/bin/sh", "-c",
+      "tail -f /logs/app.log | while read line; do
+        ts=$(echo $line | cut -d'|' -f1);
+        level=$(echo $line | cut -d'|' -f2);
+        msg=$(echo $line | cut -d'|' -f3);
+        echo \"{\\\"timestamp\\\":\\\"$ts\\\",\\\"level\\\":\\\"$level\\\",\\\"message\\\":\\\"$msg\\\"}\";
+      done"]
+    volumeMounts:
+    - name: shared-logs
+      mountPath: /logs
+
