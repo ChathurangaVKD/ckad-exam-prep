@@ -10,6 +10,11 @@
   <meta name="robots" content="index,follow"/>
   <link rel="canonical" href="https://chathurangavkd.github.io/ckad-exam-prep/"/>
 
+  <!-- Kubernetes Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Ccircle cx='128' cy='128' r='128' fill='%23326CE5'/%3E%3Cpath fill='%23fff' d='M128 36.6c-2.8 0-5.1 1.9-5.8 4.5l-15.5 56.6c-11.5 1.4-22.3 5.3-31.7 11.2L25.4 84.5a6 6 0 00-7.5 1 6 6 0 00.3 7.6l40.7 41.3c-2.3 6.5-3.6 13.5-3.6 20.8 0 6.1.9 12 2.6 17.5L17.5 188a6 6 0 00-.8 7.5 6 6 0 007.4 2.1l54.2-22.2c9.1 7.5 20.1 12.9 32.1 15.3l10.5 57.1a6 6 0 005.9 4.9h3.4a6 6 0 005.9-4.9l10.5-57.1c12-2.4 23-7.8 32.1-15.3l54.2 22.2a6 6 0 007.4-2.1 6 6 0 00-.8-7.5l-40.4-15.3c1.7-5.5 2.6-11.4 2.6-17.5 0-7.3-1.3-14.3-3.6-20.8l40.7-41.3a6 6 0 00.3-7.6 6 6 0 00-7.5-1l-50.6 24.4c-9.4-5.9-20.2-9.8-31.7-11.2L133.8 41a6 6 0 00-5.8-4.5zm0 62.4a29 29 0 110 58 29 29 0 010-58z'/%3E%3C/svg%3E"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="https://kubernetes.io/images/favicon.png"/>
+  <link rel="apple-touch-icon" href="https://kubernetes.io/images/favicon.png"/>
+
   <!-- OG / Twitter -->
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://chathurangavkd.github.io/ckad-exam-prep/"/>
@@ -32,24 +37,30 @@
 /* ─── RESET & BASE ───────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --blue:#326CE5;
-  --blue-light:#5B8DEF;
-  --blue-dark:#1A4DB5;
+  /* ── Primary: Purple-Blue gradient system ── */
+  --blue:#6D5BE8;
+  --blue-light:#8B7CF6;
+  --blue-dark:#4C3DD0;
+  --accent:#A78BFA;       /* soft violet accent */
+  --accent-2:#7C3AED;     /* deep violet */
+  --grad-start:#6D5BE8;
+  --grad-end:#A78BFA;
+
   --green:#22C55E;
-  --yellow:#F59E0B;
+  --yellow:#A78BFA;       /* replace yellow → violet */
   --red:#EF4444;
-  --purple:#A855F7;
+  --purple:#C084FC;
 
-  --bg:#09090B;
-  --surface:#111113;
-  --surface-2:#18181B;
-  --surface-3:#27272A;
-  --border:#2E2E33;
-  --border-subtle:#1E1E22;
+  --bg:#0B0A12;
+  --surface:#110F1C;
+  --surface-2:#19162A;
+  --surface-3:#241E3A;
+  --border:#302A4E;
+  --border-subtle:#211C38;
 
-  --text:#FAFAFA;
-  --text-2:#A1A1AA;
-  --text-3:#71717A;
+  --text:#F4F2FF;
+  --text-2:#A89FC8;
+  --text-3:#6B6286;
 
   --radius:12px;
   --radius-lg:16px;
@@ -58,7 +69,7 @@
   --shadow-sm:0 1px 3px rgba(0,0,0,.5);
   --shadow:0 4px 24px rgba(0,0,0,.6);
   --shadow-lg:0 8px 48px rgba(0,0,0,.8);
-  --glow:0 0 40px rgba(50,108,229,.25);
+  --glow:0 0 48px rgba(109,91,232,.3);
 }
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
 body{
@@ -69,7 +80,7 @@ body{
   min-height:100vh;
   overflow-x:hidden;
 }
-a{color:var(--blue);text-decoration:none;transition:color .2s}
+a{color:var(--accent);text-decoration:none;transition:color .2s}
 a:hover{color:var(--blue-light)}
 img{max-width:100%;height:auto}
 button{font-family:inherit;cursor:pointer;border:none;background:none}
@@ -78,69 +89,85 @@ code,pre{font-family:'JetBrains Mono',monospace}
 /* ─── SCROLLBAR ──────────────────────────────────────────── */
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:var(--surface)}
-::-webkit-scrollbar-thumb{background:var(--surface-3);border-radius:3px}
-::-webkit-scrollbar-thumb:hover{background:var(--border)}
+::-webkit-scrollbar-thumb{background:rgba(109,91,232,.4);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(167,139,250,.5)}
 
 /* ─── NAV ────────────────────────────────────────────────── */
 .nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
-  height:60px;
+  height:64px;
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 clamp(1rem,5vw,2.5rem);
-  background:rgba(9,9,11,.85);
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--border-subtle);
-  transition:background .3s,border-color .3s;
+  padding:0 clamp(1rem,5vw,3rem);
+  background:rgba(11,10,18,.88);
+  backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);
+  border-bottom:1px solid rgba(109,91,232,.15);
+  box-shadow:0 1px 0 rgba(109,91,232,.08),0 4px 24px rgba(0,0,0,.3);
+  transition:background .3s,border-color .3s,box-shadow .3s;
+}
+.nav.scrolled{
+  background:rgba(11,10,18,.97);
+  border-bottom-color:rgba(109,91,232,.22);
+  box-shadow:0 1px 0 rgba(109,91,232,.12),0 8px 40px rgba(0,0,0,.5);
 }
 .nav-brand{
   display:flex;align-items:center;gap:10px;
-  font-size:1.05rem;font-weight:700;color:var(--text);
+  font-size:1rem;font-weight:700;color:var(--text);
+  letter-spacing:-.01em;
 }
 .nav-logo{
-  width:32px;height:32px;
-  background:var(--blue);border-radius:8px;
+  width:34px;height:34px;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--accent-2) 100%);
+  border-radius:9px;
   display:grid;place-items:center;flex-shrink:0;
+  box-shadow:0 2px 12px rgba(109,91,232,.45),0 0 0 1px rgba(167,139,250,.2);
 }
 .nav-logo svg{width:18px;height:18px}
-.nav-links{display:flex;align-items:center;gap:6px}
+.nav-links{display:flex;align-items:center;gap:2px}
 .nav-links a{
-  padding:6px 14px;border-radius:8px;
-  font-size:.875rem;font-weight:500;color:var(--text-2);
-  transition:background .2s,color .2s;
+  padding:7px 13px;border-radius:8px;
+  font-size:.855rem;font-weight:500;color:rgba(168,159,200,.8);
+  transition:background .18s,color .18s;
+  white-space:nowrap;
 }
-.nav-links a:hover{background:var(--surface-2);color:var(--text)}
+.nav-links a:hover{background:rgba(109,91,232,.12);color:var(--text)}
+.nav-links a.active{color:var(--blue-light);background:rgba(109,91,232,.12)}
+.nav-divider{width:1px;height:20px;background:rgba(109,91,232,.25);margin:0 8px}
 .nav-cta{
-  padding:8px 18px;border-radius:9px;
-  background:var(--blue);color:#fff !important;
-  font-size:.875rem;font-weight:600;
-  transition:background .2s,transform .1s,box-shadow .2s !important;
-  box-shadow:0 2px 12px rgba(50,108,229,.4);
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 16px;border-radius:9px;
+  background:linear-gradient(135deg,var(--blue) 0%,var(--accent-2) 100%);
+  color:#fff !important;
+  font-size:.84rem;font-weight:600;
+  border:1px solid rgba(167,139,250,.3);
+  transition:filter .2s,transform .15s,box-shadow .2s !important;
+  box-shadow:0 2px 16px rgba(109,91,232,.45),0 0 0 1px rgba(109,91,232,.2);
+  white-space:nowrap;
 }
-.nav-cta:hover{background:var(--blue-light) !important;transform:translateY(-1px);box-shadow:0 4px 20px rgba(50,108,229,.5) !important}
-.nav-mobile-toggle{display:none;padding:6px;border-radius:8px;color:var(--text-2)}
-.nav-mobile-toggle:hover{background:var(--surface-2)}
+.nav-cta:hover{filter:brightness(1.15) !important;transform:translateY(-1px);box-shadow:0 6px 28px rgba(109,91,232,.6),0 0 0 1px rgba(167,139,250,.4) !important}
+.nav-mobile-toggle{display:none;padding:8px;border-radius:8px;color:var(--text-2);transition:background .2s,color .2s}
+.nav-mobile-toggle:hover{background:rgba(109,91,232,.12);color:var(--blue-light)}
 
 /* ─── HERO ───────────────────────────────────────────────── */
 .hero{
-  min-height:100vh;
+  min-height:min(88vh,760px);
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   text-align:center;
-  padding:6rem clamp(1rem,5vw,2rem) 4rem;
+  padding:7rem clamp(1rem,5vw,2rem) 3.5rem;
   position:relative;overflow:hidden;
 }
 .hero-bg{
   position:absolute;inset:0;
   background:
-    radial-gradient(ellipse 70% 50% at 50% -10%,rgba(50,108,229,.22) 0%,transparent 70%),
-    radial-gradient(ellipse 40% 30% at 80% 60%,rgba(168,85,247,.08) 0%,transparent 60%),
-    radial-gradient(ellipse 30% 20% at 20% 70%,rgba(34,197,94,.06) 0%,transparent 60%);
+    radial-gradient(ellipse 70% 55% at 50% -10%,rgba(109,91,232,.28) 0%,transparent 70%),
+    radial-gradient(ellipse 45% 35% at 85% 55%,rgba(167,139,250,.12) 0%,transparent 60%),
+    radial-gradient(ellipse 35% 25% at 15% 75%,rgba(124,58,237,.1) 0%,transparent 60%);
   pointer-events:none;
 }
 .hero-grid{
   position:absolute;inset:0;
   background-image:
-    linear-gradient(rgba(50,108,229,.04) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(50,108,229,.04) 1px,transparent 1px);
+    linear-gradient(rgba(109,91,232,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(109,91,232,.05) 1px,transparent 1px);
   background-size:60px 60px;
   mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 30%,transparent 100%);
   pointer-events:none;
@@ -148,8 +175,8 @@ code,pre{font-family:'JetBrains Mono',monospace}
 .hero-content{position:relative;z-index:1;max-width:780px}
 .hero-pill{
   display:inline-flex;align-items:center;gap:8px;
-  background:rgba(50,108,229,.12);
-  border:1px solid rgba(50,108,229,.3);
+  background:rgba(109,91,232,.14);
+  border:1px solid rgba(167,139,250,.3);
   border-radius:100px;
   padding:6px 16px;
   font-size:.8rem;font-weight:600;
@@ -160,24 +187,24 @@ code,pre{font-family:'JetBrains Mono',monospace}
 .hero-pill-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.8)}}
 .hero h1{
-  font-size:clamp(2.4rem,6vw,4rem);
+  font-size:clamp(2.1rem,5.5vw,3.5rem);
   font-weight:900;line-height:1.1;letter-spacing:-.03em;
-  margin-bottom:1.5rem;
+  margin-bottom:1.25rem;
   animation:fade-up .6s .1s ease both;
 }
 .hero h1 .grad{
-  background:linear-gradient(135deg,var(--blue-light) 0%,#7EB5FF 50%,var(--blue) 100%);
+  background:linear-gradient(135deg,#C4B5FD 0%,#A78BFA 40%,var(--blue) 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .hero-sub{
-  font-size:clamp(1rem,2.5vw,1.2rem);
+  font-size:clamp(.95rem,2.2vw,1.1rem);
   color:var(--text-2);
-  max-width:580px;margin:0 auto 2.5rem;
+  max-width:560px;margin:0 auto 2rem;
   line-height:1.7;
   animation:fade-up .6s .2s ease both;
 }
 .hero-actions{
-  display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-bottom:3.5rem;
+  display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-bottom:2.5rem;
   animation:fade-up .6s .3s ease both;
 }
 .btn{
@@ -187,10 +214,10 @@ code,pre{font-family:'JetBrains Mono',monospace}
   transition:all .2s;cursor:pointer;
 }
 .btn-primary{
-  background:var(--blue);color:#fff;
-  box-shadow:0 4px 20px rgba(50,108,229,.4),0 0 0 1px rgba(50,108,229,.3);
+  background:linear-gradient(135deg,var(--blue) 0%,var(--accent-2) 100%);color:#fff;
+  box-shadow:0 4px 20px rgba(109,91,232,.4),0 0 0 1px rgba(109,91,232,.3);
 }
-.btn-primary:hover{background:var(--blue-light);transform:translateY(-2px);box-shadow:0 8px 30px rgba(50,108,229,.5)}
+.btn-primary:hover{filter:brightness(1.12);transform:translateY(-2px);box-shadow:0 8px 30px rgba(109,91,232,.55)}
 .btn-outline{
   background:rgba(255,255,255,.04);color:var(--text);
   border:1px solid var(--border);
@@ -226,7 +253,7 @@ code,pre{font-family:'JetBrains Mono',monospace}
 .stat-item:hover{background:var(--surface-2)}
 .stat-val{
   font-size:1.9rem;font-weight:800;letter-spacing:-.03em;
-  background:linear-gradient(135deg,#fff 0%,var(--blue-light) 100%);
+  background:linear-gradient(135deg,#fff 0%,var(--accent) 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .stat-lbl{font-size:.78rem;color:var(--text-3);margin-top:4px;font-weight:500;text-transform:uppercase;letter-spacing:.05em}
@@ -236,9 +263,9 @@ code,pre{font-family:'JetBrains Mono',monospace}
 .section-label{
   display:inline-flex;align-items:center;gap:8px;
   font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
-  color:var(--blue);margin-bottom:1rem;
+  color:var(--accent);margin-bottom:1rem;
 }
-.section-label::before{content:'';width:20px;height:2px;background:var(--blue);border-radius:1px}
+.section-label::before{content:'';width:20px;height:2px;background:linear-gradient(90deg,var(--blue),var(--accent));border-radius:1px}
 .section-title{font-size:clamp(1.6rem,3.5vw,2.2rem);font-weight:800;letter-spacing:-.02em;margin-bottom:.6rem;line-height:1.2}
 .section-sub{color:var(--text-2);font-size:1rem;max-width:520px;line-height:1.7}
 
@@ -254,11 +281,11 @@ code,pre{font-family:'JetBrains Mono',monospace}
 }
 .domain-card::before{
   content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(50,108,229,.06) 0%,transparent 60%);
+  background:linear-gradient(135deg,rgba(109,91,232,.08) 0%,rgba(167,139,250,.04) 60%,transparent 100%);
   opacity:0;transition:opacity .25s;
 }
 .domain-card:hover{
-  border-color:rgba(50,108,229,.4);
+  border-color:rgba(109,91,232,.45);
   transform:translateY(-3px);
   box-shadow:0 12px 40px rgba(0,0,0,.4),var(--glow);
 }
@@ -266,8 +293,8 @@ code,pre{font-family:'JetBrains Mono',monospace}
 .domain-card-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem}
 .domain-icon{font-size:1.6rem;line-height:1}
 .domain-weight{
-  background:rgba(50,108,229,.15);
-  border:1px solid rgba(50,108,229,.3);
+  background:rgba(109,91,232,.15);
+  border:1px solid rgba(167,139,250,.3);
   color:var(--blue-light);
   border-radius:6px;padding:3px 10px;
   font-size:.78rem;font-weight:700;
@@ -280,7 +307,7 @@ code,pre{font-family:'JetBrains Mono',monospace}
 }
 .domain-list li::before{
   content:'';width:5px;height:5px;border-radius:50%;
-  background:var(--blue);flex-shrink:0;
+  background:linear-gradient(135deg,var(--blue),var(--accent));flex-shrink:0;
 }
 
 /* ─── FEATURES ───────────────────────────────────────────── */
@@ -290,10 +317,10 @@ code,pre{font-family:'JetBrains Mono',monospace}
   border-radius:var(--radius-lg);padding:1.75rem;
   transition:border-color .2s,transform .2s;
 }
-.feature:hover{border-color:var(--border);transform:translateY(-2px)}
+.feature:hover{border-color:rgba(109,91,232,.35);transform:translateY(-2px)}
 .feature-icon-wrap{
   width:44px;height:44px;border-radius:10px;
-  background:rgba(50,108,229,.12);border:1px solid rgba(50,108,229,.2);
+  background:rgba(109,91,232,.12);border:1px solid rgba(167,139,250,.2);
   display:grid;place-items:center;font-size:1.25rem;margin-bottom:1rem;
 }
 .feature h3{font-size:.95rem;font-weight:700;margin-bottom:.4rem}
@@ -331,7 +358,7 @@ pre{
   font-size:.85rem;line-height:1.7;color:#E2E8F0;
   tab-size:2;
 }
-.kw{color:#7EB5FF}.cm{color:#4A5568;font-style:italic}.str{color:#86EFAC}.var{color:#F9A8D4}.fn{color:#FCD34D}
+.kw{color:#C4B5FD}.cm{color:#4A4570;font-style:italic}.str{color:#86EFAC}.var{color:#F9A8D4}.fn{color:#A78BFA}
 
 /* ─── PRACTICE EXAMS ─────────────────────────────────────── */
 .exams-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.25rem;margin-top:3rem}
@@ -341,14 +368,14 @@ pre{
   display:flex;flex-direction:column;gap:1rem;
   transition:border-color .2s,transform .2s,box-shadow .2s;
 }
-.exam-card:hover{border-color:rgba(50,108,229,.3);transform:translateY(-3px);box-shadow:var(--shadow)}
+.exam-card:hover{border-color:rgba(109,91,232,.35);transform:translateY(-3px);box-shadow:var(--shadow)}
 .exam-number{
   width:36px;height:36px;border-radius:9px;
   display:grid;place-items:center;
   font-size:.85rem;font-weight:800;
 }
 .exam-number-1{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3)}
-.exam-number-2{background:rgba(245,158,11,.15);color:var(--yellow);border:1px solid rgba(245,158,11,.3)}
+.exam-number-2{background:rgba(167,139,250,.15);color:var(--accent);border:1px solid rgba(167,139,250,.3)}
 .exam-number-3{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.3)}
 .exam-title{font-size:1.05rem;font-weight:700}
 .exam-meta{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
@@ -357,7 +384,7 @@ pre{
   padding:3px 10px;border-radius:6px;
 }
 .tag-green{background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.2)}
-.tag-yellow{background:rgba(245,158,11,.1);color:var(--yellow);border:1px solid rgba(245,158,11,.2)}
+.tag-yellow{background:rgba(167,139,250,.1);color:var(--accent);border:1px solid rgba(167,139,250,.2)}
 .tag-red{background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.2)}
 .exam-desc{font-size:.875rem;color:var(--text-2);line-height:1.65;flex:1}
 .exam-link{
@@ -368,7 +395,7 @@ pre{
   border:1px solid var(--border);
   transition:all .2s;align-self:flex-start;
 }
-.exam-link:hover{background:var(--surface-3);border-color:var(--blue);color:var(--blue)}
+.exam-link:hover{background:var(--surface-3);border-color:var(--accent);color:var(--accent)}
 
 /* ─── STUDY PLAN ─────────────────────────────────────────── */
 .plan-wrapper{
@@ -386,13 +413,13 @@ pre{
   border-bottom:2px solid transparent;position:relative;
 }
 .plan-tab:hover{color:var(--text-2)}
-.plan-tab.active{color:var(--blue-light);border-bottom-color:var(--blue)}
+.plan-tab.active{color:var(--accent);border-bottom-color:var(--blue)}
 .plan-body{padding:2rem;display:none}
 .plan-body.active{display:block}
 .plan-week-label{
   display:inline-flex;align-items:center;gap:8px;
   font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
-  color:var(--blue);margin-bottom:1.25rem;
+  color:var(--accent);margin-bottom:1.25rem;
 }
 .plan-days{display:flex;flex-direction:column;gap:.75rem}
 .plan-day{
@@ -401,17 +428,17 @@ pre{
   background:var(--surface-2);border:1px solid var(--border);
   border-radius:10px;transition:border-color .2s;
 }
-.plan-day:hover{border-color:rgba(50,108,229,.3)}
+.plan-day:hover{border-color:rgba(109,91,232,.35)}
 .plan-day-num{font-size:.8rem;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em}
 .plan-day-text{font-size:.9rem;font-weight:500}
 .plan-day-sub{font-size:.8rem;color:var(--text-3);margin-top:2px}
 .plan-day-link{
-  font-size:.8rem;font-weight:600;color:var(--blue);
+  font-size:.8rem;font-weight:600;color:var(--accent);
   padding:5px 12px;border-radius:6px;
-  background:rgba(50,108,229,.1);border:1px solid rgba(50,108,229,.2);
+  background:rgba(109,91,232,.1);border:1px solid rgba(167,139,250,.2);
   white-space:nowrap;transition:all .2s;
 }
-.plan-day-link:hover{background:rgba(50,108,229,.2)}
+.plan-day-link:hover{background:rgba(109,91,232,.2);color:var(--blue-light)}
 
 /* ─── FAQ ────────────────────────────────────────────────── */
 .faq{display:flex;flex-direction:column;gap:.75rem;margin-top:3rem}
@@ -420,7 +447,7 @@ pre{
   border-radius:var(--radius-lg);overflow:hidden;
   transition:border-color .2s;
 }
-.faq-item:hover{border-color:rgba(50,108,229,.3)}
+.faq-item:hover{border-color:rgba(109,91,232,.3)}
 .faq-q{
   display:flex;align-items:center;justify-content:space-between;gap:1rem;
   padding:1.25rem 1.5rem;cursor:pointer;
@@ -434,8 +461,8 @@ pre{
   transition:transform .25s,background .2s;
 }
 .faq-chevron svg{width:12px;height:12px;stroke:var(--text-3);transition:stroke .2s}
-.faq-item.open .faq-chevron{background:rgba(50,108,229,.15);border-color:rgba(50,108,229,.3);transform:rotate(180deg)}
-.faq-item.open .faq-chevron svg{stroke:var(--blue)}
+.faq-item.open .faq-chevron{background:rgba(109,91,232,.15);border-color:rgba(167,139,250,.3);transform:rotate(180deg)}
+.faq-item.open .faq-chevron svg{stroke:var(--accent)}
 .faq-a{
   padding:0 1.5rem 1.25rem;
   font-size:.9rem;color:var(--text-2);line-height:1.75;
@@ -444,10 +471,10 @@ pre{
 .faq-item.open .faq-a{display:block}
 .faq-a code{
   font-size:.82rem;padding:2px 6px;border-radius:5px;
-  background:var(--surface-2);color:#86EFAC;border:1px solid var(--border);
+  background:rgba(109,91,232,.12);color:#C4B5FD;border:1px solid rgba(167,139,250,.25);
 }
 .faq-a pre{
-  background:var(--surface-2);border:1px solid var(--border);
+  background:var(--surface-2);border:1px solid rgba(109,91,232,.2);
   border-radius:9px;padding:1rem;margin-top:.75rem;
   font-size:.82rem;overflow-x:auto;color:#E2E8F0;
 }
@@ -459,61 +486,142 @@ pre{
   border-radius:var(--radius-lg);padding:1.5rem;
   transition:all .2s;
 }
-.qr-card:hover{border-color:rgba(50,108,229,.3);transform:translateY(-2px)}
+.qr-card:hover{border-color:rgba(109,91,232,.35);transform:translateY(-2px)}
 .qr-card-icon{font-size:1.5rem;margin-bottom:.875rem}
 .qr-card h3{font-size:.95rem;font-weight:700;margin-bottom:.4rem}
 .qr-card p{font-size:.85rem;color:var(--text-2);line-height:1.6;margin-bottom:1rem}
 .qr-link{
   display:inline-flex;align-items:center;gap:6px;
-  font-size:.82rem;font-weight:600;color:var(--blue);
+  font-size:.82rem;font-weight:600;color:var(--accent);
   padding:6px 14px;border-radius:7px;
-  background:rgba(50,108,229,.1);border:1px solid rgba(50,108,229,.2);
+  background:rgba(109,91,232,.1);border:1px solid rgba(167,139,250,.2);
   transition:all .2s;
 }
-.qr-link:hover{background:rgba(50,108,229,.2);color:var(--blue-light)}
+.qr-link:hover{background:rgba(109,91,232,.2);color:var(--blue-light)}
 
 /* ─── CTA BANNER ─────────────────────────────────────────── */
+.cta-section{
+  padding:0 clamp(1rem,5vw,2rem);
+  margin-bottom:1px;
+}
 .cta-banner{
-  margin:0 clamp(1rem,5vw,2rem) 0;
-  background:linear-gradient(135deg,rgba(50,108,229,.18) 0%,rgba(168,85,247,.1) 100%);
-  border:1px solid rgba(50,108,229,.25);
+  background:linear-gradient(135deg,rgba(109,91,232,.18) 0%,rgba(124,58,237,.1) 50%,rgba(167,139,250,.12) 100%);
+  border:1px solid rgba(109,91,232,.25);
   border-radius:var(--radius-xl);
-  padding:4rem clamp(1.5rem,5vw,3rem);
+  padding:4.5rem clamp(1.5rem,6vw,5rem);
   text-align:center;
   position:relative;overflow:hidden;
 }
 .cta-banner::before{
   content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 60% 80% at 50% 50%,rgba(50,108,229,.12) 0%,transparent 70%);
+  background:
+    radial-gradient(ellipse 70% 90% at 50% 50%,rgba(109,91,232,.12) 0%,transparent 65%),
+    radial-gradient(ellipse 30% 40% at 10% 80%,rgba(124,58,237,.08) 0%,transparent 60%),
+    radial-gradient(ellipse 25% 35% at 90% 20%,rgba(167,139,250,.06) 0%,transparent 60%);
+  pointer-events:none;
 }
-.cta-banner *{position:relative;z-index:1}
-.cta-banner h2{font-size:clamp(1.5rem,4vw,2.2rem);font-weight:800;letter-spacing:-.02em;margin-bottom:.75rem}
-.cta-banner p{color:var(--text-2);font-size:1rem;margin-bottom:2rem;max-width:480px;margin-left:auto;margin-right:auto}
-.cta-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px}
+.cta-banner::after{
+  content:'';position:absolute;
+  top:-1px;left:15%;right:15%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(167,139,250,.6),transparent);
+}
+.cta-banner>*{position:relative;z-index:1}
+.cta-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);
+  border-radius:100px;padding:5px 14px;
+  font-size:.78rem;font-weight:700;color:var(--green);
+  margin-bottom:1.5rem;letter-spacing:.02em;
+}
+.cta-eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+.cta-banner h2{
+  font-size:clamp(1.7rem,4.5vw,2.6rem);
+  font-weight:900;letter-spacing:-.03em;
+  line-height:1.1;margin-bottom:1rem;
+}
+.cta-banner h2 .cta-grad{
+  background:linear-gradient(135deg,#C4B5FD 0%,var(--accent-2) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.cta-banner p{
+  color:var(--text-2);font-size:1.05rem;
+  margin:0 auto 2.25rem;max-width:500px;line-height:1.7;
+}
+.cta-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-bottom:2.5rem}
+.cta-trust{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:1.5rem;
+}
+.cta-trust-item{
+  display:flex;align-items:center;gap:7px;
+  font-size:.82rem;color:var(--text-3);font-weight:500;
+}
+.cta-trust-item svg{flex-shrink:0;opacity:.6}
 
 /* ─── FOOTER ─────────────────────────────────────────────── */
 footer{
+  background:var(--surface);
   border-top:1px solid var(--border);
-  padding:3rem clamp(1rem,5vw,2.5rem) 2rem;
+  padding:4rem clamp(1rem,5vw,2.5rem) 0;
+  margin-top:5rem;
 }
 .footer-inner{
   max-width:1160px;margin:0 auto;
-  display:grid;grid-template-columns:1fr auto;gap:3rem;align-items:start;
+  display:grid;
+  grid-template-columns:1.6fr 1fr 1fr 1fr;
+  gap:3rem;align-items:start;
 }
-.footer-brand{display:flex;flex-direction:column;gap:.875rem}
+.footer-brand{display:flex;flex-direction:column;gap:1rem}
 .footer-brand-row{display:flex;align-items:center;gap:10px}
-.footer-brand h3{font-size:1rem;font-weight:700}
-.footer-brand p{font-size:.85rem;color:var(--text-3);max-width:320px;line-height:1.6}
-.footer-links h4{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:.875rem}
-.footer-links ul{list-style:none;display:flex;flex-direction:column;gap:.5rem}
-.footer-links li a{font-size:.875rem;color:var(--text-2);transition:color .2s}
-.footer-links li a:hover{color:var(--text)}
+.footer-brand h3{font-size:1rem;font-weight:700;letter-spacing:-.01em}
+.footer-brand p{
+  font-size:.855rem;color:var(--text-3);
+  max-width:280px;line-height:1.65;
+}
+.footer-social{display:flex;gap:8px;margin-top:.25rem}
+.footer-social a{
+  width:34px;height:34px;border-radius:8px;
+  background:var(--surface-2);border:1px solid var(--border);
+  display:grid;place-items:center;
+  color:var(--text-3);
+  transition:background .2s,border-color .2s,color .2s;
+}
+.footer-social a:hover{background:var(--surface-3);border-color:var(--accent);color:var(--accent)}
+.footer-col h4{
+  font-size:.75rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.1em;
+  color:var(--text-3);margin-bottom:1rem;
+}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+.footer-col li a{
+  font-size:.875rem;color:var(--text-2);
+  transition:color .2s;display:flex;align-items:center;gap:6px;
+}
+.footer-col li a:hover{color:var(--text)}
+.footer-col li a .foot-arrow{
+  opacity:0;transform:translateX(-4px);
+  transition:opacity .2s,transform .2s;font-size:.75rem;
+}
+.footer-col li a:hover .foot-arrow{opacity:1;transform:translateX(0)}
+.footer-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);
+  border-radius:7px;padding:5px 10px;
+  font-size:.75rem;font-weight:600;color:var(--green);
+  margin-top:.5rem;align-self:flex-start;
+}
 .footer-bottom{
-  max-width:1160px;margin:2rem auto 0;
-  padding-top:1.5rem;border-top:1px solid var(--border);
-  display:flex;flex-wrap:wrap;justify-content:space-between;gap:.75rem;
+  max-width:1160px;margin:3rem auto 0;
+  padding:1.5rem 0 2rem;
+  border-top:1px solid var(--border-subtle);
+  display:flex;flex-wrap:wrap;align-items:center;
+  justify-content:space-between;gap:.875rem;
   font-size:.8rem;color:var(--text-3);
 }
+.footer-bottom a{color:var(--text-2);transition:color .2s}
+.footer-bottom a:hover{color:var(--text)}
+.footer-bottom-left{display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap}
+.footer-bottom-right{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;justify-content:flex-end}
+.footer-sep{opacity:.3}
 
 /* ─── ANIMATIONS ─────────────────────────────────────────── */
 @keyframes fade-up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
@@ -525,21 +633,28 @@ footer{
   .nav-links{display:none}
   .nav-links.open{
     display:flex;flex-direction:column;gap:4px;
-    position:fixed;top:60px;left:0;right:0;
-    background:rgba(9,9,11,.97);backdrop-filter:blur(20px);
-    padding:1rem;border-bottom:1px solid var(--border);
+    position:fixed;top:64px;left:0;right:0;
+    background:rgba(9,9,14,.98);backdrop-filter:blur(28px);
+    padding:1rem;
+    border-bottom:1px solid rgba(109,91,232,.18);
+    box-shadow:0 16px 40px rgba(0,0,0,.5);
     z-index:99;
   }
-  .nav-links.open a{padding:10px 14px;border-radius:8px}
+  .nav-links.open a{padding:10px 14px;border-radius:8px;color:var(--text-2)}
+  .nav-links.open a:hover{background:rgba(109,91,232,.12);color:var(--text)}
+  .nav-divider{display:none}
   .nav-mobile-toggle{display:flex}
   .plan-day{grid-template-columns:70px 1fr;grid-template-rows:auto auto}
   .plan-day-link{grid-column:1/-1}
-  .footer-inner{grid-template-columns:1fr}
-  .footer-links{display:none}
+  .footer-inner{grid-template-columns:1fr 1fr;gap:2rem}
+  .footer-brand{grid-column:1/-1}
 }
 @media(max-width:480px){
   .stat-item{min-width:50%;border-right:1px solid var(--border)}
   .stat-item:nth-child(2n){border-right:none}
+  .footer-inner{grid-template-columns:1fr}
+  .footer-brand{grid-column:auto}
+  .footer-bottom-left,.footer-bottom-right{width:100%;justify-content:flex-start}
 }
   </style>
 </head>
@@ -562,7 +677,11 @@ footer{
     <a href="#practice">Practice</a>
     <a href="#study-plan">Study Plan</a>
     <a href="#faq">FAQ</a>
-    <a href="https://github.com/ChathurangaVKD/ckad-exam-prep" class="nav-cta">⭐ Star on GitHub</a>
+    <div class="nav-divider"></div>
+    <a href="https://github.com/ChathurangaVKD/ckad-exam-prep" class="nav-cta">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      Star on GitHub
+    </a>
   </nav>
 
   <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Menu">
@@ -670,7 +789,7 @@ footer{
       </ul>
     </div>
 
-    <div class="domain-card" style="border-color:rgba(50,108,229,.25)">
+    <div class="domain-card" style="border-color:rgba(109,91,232,.3)">
       <div class="domain-card-head">
         <span class="domain-icon">🔐</span>
         <span class="domain-weight" style="background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3);color:#f87171">25% ★</span>
@@ -1040,46 +1159,122 @@ kubectl create rolebinding rb --role=my-role --sa=default:sa  # RoleBinding</pre
 </section>
 
 <!-- CTA BANNER -->
-<div class="cta-banner reveal">
-  <h2>Ready to pass your CKAD exam?</h2>
-  <p>Star the repo to save it, then start with Day 1 of the study plan. It's 100% free.</p>
+<div class="cta-section reveal">
+<div class="cta-banner">
+  <div class="cta-eyebrow"><span class="cta-eyebrow-dot"></span>100% Free · No account required</div>
+  <h2>Ready to pass your<br/><span class="cta-grad">CKAD exam?</span></h2>
+  <p>Star the repo to bookmark it, then follow the 14-day plan. Everything you need is right here — no paid course required.</p>
   <div class="cta-actions">
     <a href="https://github.com/ChathurangaVKD/ckad-exam-prep" class="btn btn-primary">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
       ⭐ Star on GitHub
     </a>
     <a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/01-application-design-build/README.md" class="btn btn-outline">
       📚 Start Day 1 Now
     </a>
   </div>
+  <div class="cta-trust">
+    <span class="cta-trust-item">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+      All 5 CKAD domains covered
+    </span>
+    <span class="cta-trust-item">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+      50+ YAML manifests ready to use
+    </span>
+    <span class="cta-trust-item">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+      Updated for CKAD v1.35 · 2026
+    </span>
+    <span class="cta-trust-item">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+      MIT License · Open source
+    </span>
+  </div>
+</div>
 </div>
 
 <!-- FOOTER -->
 <footer>
   <div class="footer-inner">
+
+    <!-- Brand col -->
     <div class="footer-brand">
       <div class="footer-brand-row">
         <div class="nav-logo"><svg viewBox="0 0 20 20" fill="none"><path d="M10 2L3 6V14L10 18L17 14V6L10 2Z" stroke="white" stroke-width="1.5" stroke-linejoin="round"/><circle cx="10" cy="10" r="2.5" fill="white"/></svg></div>
         <h3>CKAD Exam Prep</h3>
       </div>
-      <p>A free, comprehensive CKAD study guide covering all 5 CNCF curriculum domains — YAML manifests, practice exams, and quick-reference cheatsheets.</p>
+      <p>A free, community-maintained CKAD study guide covering all 5 CNCF curriculum domains with 50+ YAML manifests, 3 practice exams, and quick-reference cheatsheets.</p>
+      <span class="footer-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        Updated for CKAD v1.35 · April 2026
+      </span>
+      <div class="footer-social">
+        <a href="https://github.com/ChathurangaVKD/ckad-exam-prep" aria-label="GitHub" title="GitHub Repository">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+        <a href="https://www.cncf.io/certification/ckad/" aria-label="CNCF" title="Official CNCF CKAD Page">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+        </a>
+        <a href="https://kubernetes.io/docs" aria-label="Kubernetes Docs" title="Kubernetes Documentation">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </a>
+      </div>
     </div>
-    <div class="footer-links">
-      <h4>Resources</h4>
+
+    <!-- Study Guide col -->
+    <div class="footer-col">
+      <h4>Study Guide</h4>
       <ul>
-        <li><a href="https://github.com/ChathurangaVKD/ckad-exam-prep">GitHub Repository</a></li>
-        <li><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/quick-reference/kubectl-cheatsheet.md">kubectl Cheatsheet</a></li>
-        <li><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/quick-reference/yaml-templates.md">YAML Templates</a></li>
-        <li><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/quick-reference/exam-tips.md">Exam Tips</a></li>
-        <li><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/CONTRIBUTING.md">Contributing</a></li>
-        <li><a href="https://www.cncf.io/certification/ckad/">Official CKAD Exam</a></li>
-        <li><a href="https://kubernetes.io/docs">Kubernetes Docs</a></li>
+        <li><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/01-application-design-build/README.md">Domain 1 — Design & Build <span class="foot-arrow">→</span></a></li>
+        <li><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/02-application-deployment/README.md">Domain 2 — Deployment <span class="foot-arrow">→</span></a></li>
+        <li><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/03-observability-maintenance/README.md">Domain 3 — Observability <span class="foot-arrow">→</span></a></li>
+        <li><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/04-environment-config-security/README.md">Domain 4 — Config & Security <span class="foot-arrow">→</span></a></li>
+        <li><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/05-services-networking/README.md">Domain 5 — Networking <span class="foot-arrow">→</span></a></li>
       </ul>
     </div>
+
+    <!-- Quick Reference col -->
+    <div class="footer-col">
+      <h4>Quick Reference</h4>
+      <ul>
+        <li><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/quick-reference/kubectl-cheatsheet.md">kubectl Cheatsheet <span class="foot-arrow">→</span></a></li>
+        <li><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/quick-reference/yaml-templates.md">YAML Templates <span class="foot-arrow">→</span></a></li>
+        <li><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/quick-reference/exam-tips.md">Exam Tips & Strategy <span class="foot-arrow">→</span></a></li>
+        <li><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/practice-exams/exam-01/README.md">Practice Exam 1 <span class="foot-arrow">→</span></a></li>
+        <li><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/practice-exams/exam-02/README.md">Practice Exam 2 <span class="foot-arrow">→</span></a></li>
+        <li><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/practice-exams/exam-03/README.md">Practice Exam 3 <span class="foot-arrow">→</span></a></li>
+      </ul>
+    </div>
+
+    <!-- Official Resources col -->
+    <div class="footer-col">
+      <h4>Official Links</h4>
+      <ul>
+        <li><a href="https://www.cncf.io/certification/ckad/">CNCF CKAD Exam Page <span class="foot-arrow">→</span></a></li>
+        <li><a href="https://github.com/cncf/curriculum">CNCF Curriculum v1.35 <span class="foot-arrow">→</span></a></li>
+        <li><a href="https://kubernetes.io/docs">Kubernetes Docs <span class="foot-arrow">→</span></a></li>
+        <li><a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/">kubectl Reference <span class="foot-arrow">→</span></a></li>
+        <li><a href="https://helm.sh/docs">Helm Docs <span class="foot-arrow">→</span></a></li>
+        <li><a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/CONTRIBUTING.md">Contribute <span class="foot-arrow">→</span></a></li>
+      </ul>
+    </div>
+
   </div>
+
   <div class="footer-bottom">
-    <span>Made with ❤️ by <a href="https://github.com/ChathurangaVKD">Dasun Chathuranga</a> · MIT License</span>
-    <span>CKAD™ is a trademark of the Linux Foundation. Independent community resource.</span>
+    <div class="footer-bottom-left">
+      <span>Made with ❤️ by <a href="https://github.com/ChathurangaVKD">Dasun Chathuranga</a></span>
+      <span class="footer-sep">|</span>
+      <a href="https://github.com/ChathurangaVKD/ckad-exam-prep/blob/main/LICENSE">MIT License</a>
+      <span class="footer-sep">|</span>
+      <a href="https://github.com/ChathurangaVKD/ckad-exam-prep">Open Source on GitHub</a>
+    </div>
+    <div class="footer-bottom-right">
+      <span>CKAD™ is a trademark of the Linux Foundation.</span>
+      <span class="footer-sep">·</span>
+      <span>Independent community resource.</span>
+    </div>
   </div>
 </footer>
 
@@ -1098,10 +1293,30 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.08 });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-// Sticky nav shadow
+// Sticky nav shadow + scrolled class
+const navEl = document.getElementById('nav');
 window.addEventListener('scroll', () => {
-  document.getElementById('nav').style.boxShadow = window.scrollY > 10 ? '0 1px 20px rgba(0,0,0,.6)' : '';
+  if (window.scrollY > 10) {
+    navEl.classList.add('scrolled');
+  } else {
+    navEl.classList.remove('scrolled');
+    navEl.style.boxShadow = '';
+  }
 });
+
+// Active nav link on scroll
+const sections = document.querySelectorAll('section[id], div[id]');
+const navAnchors = document.querySelectorAll('.nav-links a[href^="#"]');
+const activateNav = () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY + 80 >= s.offsetTop) current = s.id;
+  });
+  navAnchors.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+};
+window.addEventListener('scroll', activateNav, { passive: true });
 
 // Study plan tabs
 document.querySelectorAll('.plan-tab').forEach(tab => {
@@ -1147,7 +1362,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     const target = document.querySelector(a.getAttribute('href'));
     if (target) {
       e.preventDefault();
-      const offset = 68;
+      const offset = 72;
       window.scrollTo({ top: target.offsetTop - offset, behavior: 'smooth' });
       navLinks.classList.remove('open');
     }
