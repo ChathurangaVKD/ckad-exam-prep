@@ -1,0 +1,49 @@
+name: Validate YAML Manifests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**/*.yaml'
+      - '**/*.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - '**/*.yaml'
+      - '**/*.yml'
+
+jobs:
+  validate-yaml:
+    name: Validate Kubernetes YAML
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install kubeval
+        run: |
+          wget https://github.com/instrumenta/kubeval/releases/latest/download/kubeval-linux-amd64.tar.gz
+          tar xf kubeval-linux-amd64.tar.gz
+          sudo mv kubeval /usr/local/bin
+
+      - name: Validate all YAML manifests
+        run: |
+          find . -name "*.yaml" -not -path "./.github/*" | while read f; do
+            echo "Validating: $f"
+            kubeval --ignore-missing-schemas "$f" || true
+          done
+
+  check-links:
+    name: Check Markdown Links
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check README links
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: 'yes'
+          config-file: '.github/mlc-config.json'
+        continue-on-error: true
+

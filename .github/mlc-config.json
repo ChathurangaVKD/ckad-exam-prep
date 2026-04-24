@@ -1,0 +1,12 @@
+{
+  "ignorePatterns": [
+    {
+      "pattern": "^https://killer.sh"
+    },
+    {
+      "pattern": "^https://kodekloud.com"
+    }
+  ],
+  "aliveStatusCodes": [200, 206]
+}
+
