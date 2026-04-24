@@ -1,6 +1,7 @@
 # 📦 Domain 1: Application Design and Build (20%)
 
 ## Topics Covered
+
 - Define, build and modify container images
 - Choose and use the right workload resource (Deployment, DaemonSet, CronJob, etc.)
 - Understand multi-container Pod design patterns
@@ -10,10 +11,9 @@
 
 ## 1.1 Container Images
 
-### Building a Docker Image
+### Basic Dockerfile
 
 ```dockerfile
-# Dockerfile
 FROM node:18-alpine
 WORKDIR /app
 COPY package*.json ./
@@ -27,14 +27,10 @@ CMD ["node", "server.js"]
 ```bash
 # Build and tag
 docker build -t myapp:1.0 .
-docker build -t myapp:1.0 -f Dockerfile.prod .
 
 # Push to registry
 docker tag myapp:1.0 myregistry.io/myapp:1.0
 docker push myregistry.io/myapp:1.0
-
-# Run container locally
-docker run -d -p 3000:3000 --name myapp myapp:1.0
 ```
 
 ### Multi-Stage Build (Optimized)
@@ -59,7 +55,17 @@ ENTRYPOINT ["/server"]
 
 ## 1.2 Running Pods
 
-### Basic Pod
+```bash
+# Imperative commands (FASTER on exam!)
+kubectl run my-pod --image=nginx:1.25
+kubectl run my-pod --image=nginx --port=80 --labels="app=myapp,env=dev"
+
+# Generate YAML without creating
+kubectl run my-pod --image=nginx --dry-run=client -o yaml > pod.yaml
+
+# Create from file
+kubectl apply -f pod-basic.yaml
+```
 
 ```yaml
 # pod-basic.yaml
@@ -69,7 +75,6 @@ metadata:
   name: my-pod
   labels:
     app: myapp
-    env: dev
 spec:
   containers:
   - name: my-container
@@ -85,28 +90,11 @@ spec:
         memory: "256Mi"
 ```
 
-```bash
-# Imperative commands (FASTER on exam!)
-kubectl run my-pod --image=nginx:1.25
-kubectl run my-pod --image=nginx --port=80 --labels="app=myapp,env=dev"
-
-# Generate YAML without creating
-kubectl run my-pod --image=nginx --dry-run=client -o yaml > pod.yaml
-
-# Create from file
-kubectl apply -f pod-basic.yaml
-
-# Get pod info
-kubectl get pod my-pod -o wide
-kubectl describe pod my-pod
-kubectl get pod my-pod -o yaml
-```
-
 ---
 
 ## 1.3 Jobs
 
-Jobs create one or more Pods and ensure a specified number of them successfully terminate.
+Jobs create one or more Pods and ensure a specified number complete successfully.
 
 ```yaml
 # job-basic.yaml
@@ -117,8 +105,8 @@ metadata:
 spec:
   completions: 5        # Total successful completions needed
   parallelism: 2        # Run 2 pods at a time
-  backoffLimit: 4       # Retry on failure
-  activeDeadlineSeconds: 100  # Kill job after 100s
+  backoffLimit: 4       # Retry limit on failure
+  activeDeadlineSeconds: 100
   template:
     spec:
       restartPolicy: Never   # Never or OnFailure (NOT Always)
@@ -131,9 +119,6 @@ spec:
 ```bash
 # Create job imperatively
 kubectl create job my-job --image=busybox -- echo "Hello Job"
-
-# Create job from a cronjob
-kubectl create job test-job --from=cronjob/my-cronjob
 
 # Watch job progress
 kubectl get jobs
@@ -155,19 +140,17 @@ kubectl logs -l job-name=pi-calculator
 ## 1.4 CronJobs
 
 ```yaml
-# cronjob.yaml
+# cronjob-basic.yaml
 apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: hello-cron
 spec:
   schedule: "*/5 * * * *"     # Every 5 minutes
-  timeZone: "America/New_York" # Optional timezone
   concurrencyPolicy: Forbid    # Allow, Forbid, Replace
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 1
-  startingDeadlineSeconds: 60  # Start within 60s of scheduled time
-  suspend: false
+  startingDeadlineSeconds: 60
   jobTemplate:
     spec:
       template:
@@ -176,27 +159,24 @@ spec:
           containers:
           - name: hello
             image: busybox:1.28
-            command:
-            - /bin/sh
-            - -c
-            - date; echo "Hello from CronJob"
+            command: ["/bin/sh", "-c", "date; echo Hello from CronJob"]
 ```
 
 ```bash
 # Create imperatively
 kubectl create cronjob my-cron --image=busybox --schedule="*/5 * * * *" -- echo hello
 
-# Cron schedule examples
-# ┌───────────── minute (0-59)
+# Cron schedule cheatsheet:
+# ┌─────────────── minute (0-59)
 # │ ┌───────────── hour (0-23)
-# │ │ ┌───────────── day of month (1-31)
-# │ │ │ ┌───────────── month (1-12)
-# │ │ │ │ ┌───────────── day of week (0-6, Sun=0)
+# │ │ ┌─────────── day of month (1-31)
+# │ │ │ ┌───────── month (1-12)
+# │ │ │ │ ┌─────── day of week (0-6, Sun=0)
 # * * * * *
-
-# "0 */2 * * *"   = Every 2 hours
-# "0 8 * * 1"     = Every Monday at 8am
-# "@daily"        = Every day at midnight
+#
+# "0 */2 * * *"  = Every 2 hours
+# "0 8 * * 1"    = Every Monday at 8am
+# "*/5 * * * *"  = Every 5 minutes
 ```
 
 ---
@@ -204,6 +184,8 @@ kubectl create cronjob my-cron --image=busybox --schedule="*/5 * * * *" -- echo 
 ## 1.5 Multi-Container Pod Patterns
 
 ### Sidecar Pattern
+
+The sidecar extends or enhances the main container.
 
 ```yaml
 # sidecar-pod.yaml
@@ -216,16 +198,14 @@ spec:
   - name: shared-logs
     emptyDir: {}
   containers:
-  # Main application container
   - name: app
     image: nginx:1.25
     volumeMounts:
     - name: shared-logs
       mountPath: /var/log/nginx
-  # Sidecar: ships logs to external system
   - name: log-shipper
     image: busybox
-    command: ["/bin/sh", "-c", "tail -f /logs/access.log"]
+    command: ["/bin/sh", "-c", "tail -n+1 -F /logs/access.log"]
     volumeMounts:
     - name: shared-logs
       mountPath: /logs
@@ -233,33 +213,31 @@ spec:
 
 ### Ambassador Pattern
 
+The ambassador proxies network connections on behalf of the main container.
+
 ```yaml
-# ambassador-pod.yaml
 apiVersion: v1
 kind: Pod
 metadata:
   name: ambassador-example
 spec:
   containers:
-  # Main app connects to localhost:5432
   - name: app
     image: myapp:1.0
     env:
     - name: DB_HOST
-      value: "localhost"
-    - name: DB_PORT
-      value: "5432"
-  # Ambassador proxies to real DB
+      value: "localhost"   # App connects to ambassador on localhost
   - name: db-ambassador
     image: haproxy:2.8
     ports:
-    - containerPort: 5432
+    - containerPort: 5432  # Ambassador forwards to real DB
 ```
 
 ### Adapter Pattern
 
+The adapter transforms the main container's output to a standard format.
+
 ```yaml
-# adapter-pod.yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -274,9 +252,8 @@ spec:
     volumeMounts:
     - name: shared-data
       mountPath: /app/logs
-  # Adapter transforms legacy log format to standard format
   - name: log-adapter
-    image: log-transformer:1.0
+    image: log-transformer:1.0  # Converts legacy format to standard JSON
     volumeMounts:
     - name: shared-data
       mountPath: /logs
@@ -286,10 +263,10 @@ spec:
 
 ## 1.6 Init Containers
 
-Init containers run **before** app containers. They must complete successfully before main containers start.
+Init containers run **before** app containers start. All init containers must succeed.
 
 ```yaml
-# init-container-pod.yaml
+# init-pod.yaml
 apiVersion: v1
 kind: Pod
 metadata:
@@ -298,17 +275,17 @@ spec:
   initContainers:
   - name: wait-for-db
     image: busybox:1.28
-    command: ['sh', '-c', 
+    command: ['sh', '-c',
       'until nslookup db-service; do echo "Waiting for DB..."; sleep 2; done']
   - name: init-config
     image: busybox:1.28
-    command: ['sh', '-c', 'echo "Config initialized" > /work-dir/status']
+    command: ['sh', '-c', 'echo "Config ready" > /work-dir/status']
     volumeMounts:
     - name: workdir
       mountPath: /work-dir
   containers:
   - name: app
-    image: myapp:1.0
+    image: nginx:1.25
     volumeMounts:
     - name: workdir
       mountPath: /app/config
@@ -327,9 +304,7 @@ spec:
 volumes:
 - name: cache-vol
   emptyDir: {}
-  # emptyDir:
-  #   medium: Memory   # RAM-backed (tmpfs)
-  #   sizeLimit: 100Mi
+  # RAM-backed: emptyDir: {medium: Memory, sizeLimit: 100Mi}
 ```
 
 ### HostPath (node directory)
@@ -339,26 +314,24 @@ volumes:
 - name: host-vol
   hostPath:
     path: /data
-    type: DirectoryOrCreate  # Directory, File, Socket, etc.
+    type: DirectoryOrCreate
 ```
 
 ### PersistentVolumeClaim
 
 ```yaml
-# pvc.yaml
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: my-pvc
 spec:
   accessModes:
-  - ReadWriteOnce       # RWO, ROX (ReadOnlyMany), RWX (ReadWriteMany)
+  - ReadWriteOnce       # RWO | ROX (ReadOnlyMany) | RWX (ReadWriteMany)
   storageClassName: standard
   resources:
     requests:
       storage: 1Gi
 ---
-# pod using PVC
 apiVersion: v1
 kind: Pod
 metadata:
@@ -370,56 +343,70 @@ spec:
       claimName: my-pvc
   containers:
   - name: app
-    image: nginx
+    image: nginx:1.25
     volumeMounts:
     - name: my-storage
       mountPath: /data
-```
-
-```bash
-kubectl get pv
-kubectl get pvc
-kubectl describe pvc my-pvc
 ```
 
 ---
 
 ## 🧪 Practice Exercises
 
-### Exercise 1.1 - Build and Run a Container
-1. Create a `Dockerfile` for a simple web app
-2. Build the image locally
+### Exercise 1.1 — Build a Container Image
+
+1. Write a `Dockerfile` for a simple Node.js or Python app
+2. Build the image locally: `docker build -t myapp:1.0 .`
 3. Run a Pod using that image
 
-### Exercise 1.2 - Jobs
+### Exercise 1.2 — Jobs
+
 ```bash
-# Task: Run a job that calculates MD5 of /etc/hosts, 3 times in parallel
-kubectl create job hash-job \
-  --image=busybox \
-  -- sh -c "md5sum /etc/hosts"
-# Then edit to add completions: 3, parallelism: 3
+# Create a job that prints hostname 5 times in parallel (2 at a time)
+kubectl apply -f - <<EOF
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hostname-job
+spec:
+  completions: 5
+  parallelism: 2
+  backoffLimit: 3
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: job
+        image: busybox
+        command: ["hostname"]
+EOF
+kubectl get jobs
+kubectl get pods -l job-name=hostname-job
 ```
 
-### Exercise 1.3 - CronJob
+### Exercise 1.3 — CronJob
+
 ```bash
-# Task: Create a CronJob that prints the date every minute
+# Create a CronJob that prints the date every minute
 kubectl create cronjob date-printer \
   --image=busybox \
   --schedule="* * * * *" \
   -- date
-# Verify it runs
+
 kubectl get cronjob date-printer
 kubectl get jobs
 ```
 
-### Exercise 1.4 - Multi-Container Pod
-Create a Pod with:
-- Main container: `nginx` serving from `/usr/share/nginx/html`
-- Init container: `busybox` that writes `index.html` to a shared volume
+### Exercise 1.4 — Multi-Container Pod
 
-### Exercise 1.5 - Volumes
+Create a Pod with:
+- Init container (`busybox`) writing `index.html` to a shared volume
+- Main container (`nginx`) serving from that volume
+- Sidecar container (`busybox`) tailing the nginx access log
+
+### Exercise 1.5 — PVC
+
 ```bash
-# Task: Create PVC of 500Mi and mount it in an nginx pod at /data
 kubectl apply -f - <<EOF
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -431,6 +418,7 @@ spec:
     requests:
       storage: 500Mi
 EOF
+kubectl get pvc
 ```
 
 ---
@@ -440,7 +428,7 @@ EOF
 ```bash
 # Pods
 kubectl run NAME --image=IMAGE [--port=PORT] [--labels="k=v"]
-kubectl run NAME --image=IMAGE --dry-run=client -o yaml
+kubectl run NAME --image=IMAGE --dry-run=client -o yaml > pod.yaml
 
 # Jobs
 kubectl create job NAME --image=IMAGE -- COMMAND
@@ -454,4 +442,3 @@ kubectl explain pod.spec.initContainers
 kubectl explain pod.spec.volumes
 kubectl explain pvc.spec.accessModes
 ```
-

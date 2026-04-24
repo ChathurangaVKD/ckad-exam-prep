@@ -1,6 +1,7 @@
 # 🚀 Domain 2: Application Deployment (20%)
 
 ## Topics Covered
+
 - Use Kubernetes primitives to implement common deployment strategies
 - Understand Deployments and how to perform rolling updates
 - Use the Helm package manager to deploy existing packages
@@ -10,8 +11,6 @@
 
 ## 2.1 Deployments
 
-A Deployment provides declarative updates for Pods and ReplicaSets.
-
 ```yaml
 # deployment-basic.yaml
 apiVersion: apps/v1
@@ -20,6 +19,8 @@ metadata:
   name: my-deployment
   labels:
     app: myapp
+  annotations:
+    kubernetes.io/change-cause: "Initial deployment nginx 1.24"
 spec:
   replicas: 3
   selector:
@@ -58,18 +59,12 @@ kubectl scale deployment my-deploy --replicas=5
 # Update image
 kubectl set image deployment/my-deploy myapp=nginx:1.25
 
-# Check rollout status
+# Rollout commands
 kubectl rollout status deployment/my-deploy
-
-# View rollout history
 kubectl rollout history deployment/my-deploy
 kubectl rollout history deployment/my-deploy --revision=2
-
-# Rollback
 kubectl rollout undo deployment/my-deploy
 kubectl rollout undo deployment/my-deploy --to-revision=1
-
-# Pause/Resume rollout
 kubectl rollout pause deployment/my-deploy
 kubectl rollout resume deployment/my-deploy
 ```
@@ -88,49 +83,33 @@ strategy:
     maxUnavailable: 25%  # Default: 25%
 ```
 
-### Recreate Strategy (Downtime)
+### Recreate Strategy
 
 ```yaml
 strategy:
   type: Recreate
-# All old pods killed before new ones created
-# Causes downtime but ensures no version mixing
+# All old pods killed before new ones start — causes downtime
 ```
 
 ### Blue-Green Deployment
 
 ```bash
-# Blue (current) deployment exists: my-app-blue
-# Create green (new) deployment
-kubectl create deployment my-app-green --image=nginx:1.25 --replicas=3
+# 1. Blue (current) deployment exists with label version=blue
+# 2. Create green deployment
+kubectl create deployment myapp-green --image=nginx:1.25 --replicas=3
+kubectl label pods -l app=myapp-green version=green
 
-# Switch service selector to green
-kubectl patch service my-service -p '{"spec":{"selector":{"version":"green"}}}'
+# 3. Switch service selector to green
+kubectl patch service myapp-svc -p '{"spec":{"selector":{"version":"green"}}}'
 
-# Verify, then delete blue
-kubectl delete deployment my-app-blue
-```
-
-```yaml
-# blue-green-service.yaml
-apiVersion: v1
-kind: Service
-metadata:
-  name: my-service
-spec:
-  selector:
-    app: myapp
-    version: blue    # Change to "green" to switch traffic
-  ports:
-  - port: 80
-    targetPort: 80
+# 4. Verify, then delete blue
+kubectl delete deployment myapp-blue
 ```
 
 ### Canary Deployment
 
 ```yaml
-# canary-deployment.yaml
-# Stable: 9 replicas
+# 9 stable replicas + 1 canary = 10% canary traffic
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -151,7 +130,6 @@ spec:
       - name: myapp
         image: myapp:v1
 ---
-# Canary: 1 replica (10% traffic)
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -172,49 +150,24 @@ spec:
       - name: myapp
         image: myapp:v2
 ---
-# Service selects ALL pods with app=myapp
 apiVersion: v1
 kind: Service
 metadata:
   name: myapp-service
 spec:
   selector:
-    app: myapp    # Selects both stable and canary
+    app: myapp    # Selects BOTH stable and canary pods
   ports:
   - port: 80
 ```
 
 ---
 
-## 2.3 ReplicaSets & DaemonSets
+## 2.3 DaemonSet
 
-### ReplicaSet
-
-```yaml
-# replicaset.yaml
-apiVersion: apps/v1
-kind: ReplicaSet
-metadata:
-  name: my-rs
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: myapp
-  template:
-    metadata:
-      labels:
-        app: myapp
-    spec:
-      containers:
-      - name: myapp
-        image: nginx:1.25
-```
-
-### DaemonSet (one pod per node)
+Runs one pod per node.
 
 ```yaml
-# daemonset.yaml
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
@@ -245,10 +198,9 @@ spec:
 
 ---
 
-## 2.4 StatefulSets
+## 2.4 StatefulSet
 
 ```yaml
-# statefulset.yaml
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -279,13 +231,12 @@ spec:
         requests:
           storage: 1Gi
 ---
-# Required headless service
 apiVersion: v1
 kind: Service
 metadata:
   name: web-headless
 spec:
-  clusterIP: None    # Headless!
+  clusterIP: None    # Headless service required for StatefulSet
   selector:
     app: web
   ports:
@@ -296,96 +247,45 @@ spec:
 
 ## 2.5 Helm
 
-Helm is the package manager for Kubernetes.
-
 ```bash
-# Install Helm (if not installed)
-curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
-
-# Add a repo
-helm repo add stable https://charts.helm.sh/stable
+# Repo management
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm repo update
-
-# Search for charts
 helm search repo nginx
-helm search hub wordpress
 
-# Install a chart
+# Install
 helm install my-nginx bitnami/nginx
-helm install my-nginx bitnami/nginx --namespace mynamespace --create-namespace
-
-# Install with custom values
 helm install my-nginx bitnami/nginx --set service.type=NodePort
 helm install my-nginx bitnami/nginx -f custom-values.yaml
 
-# List releases
+# Manage releases
 helm list
-helm list -A  # All namespaces
-
-# Upgrade a release
-helm upgrade my-nginx bitnami/nginx --set replicaCount=3
-helm upgrade --install my-nginx bitnami/nginx  # Install if not exists
-
-# View release info
 helm status my-nginx
 helm get values my-nginx
 helm get manifest my-nginx
 
-# Rollback
-helm rollback my-nginx 1  # Rollback to revision 1
+# Upgrade and rollback
+helm upgrade my-nginx bitnami/nginx --set replicaCount=3
+helm rollback my-nginx 1
 
 # Uninstall
 helm uninstall my-nginx
 
-# Dry run
-helm install my-nginx bitnami/nginx --dry-run
-
-# Template (generate manifests)
-helm template my-nginx bitnami/nginx
-
-# Inspect chart
+# Inspect before installing
 helm show values bitnami/nginx
-helm show chart bitnami/nginx
-```
-
-### Custom Helm Chart Structure
-
-```
-my-chart/
-├── Chart.yaml         # Chart metadata
-├── values.yaml        # Default values
-├── templates/
-│   ├── deployment.yaml
-│   ├── service.yaml
-│   ├── _helpers.tpl   # Template helpers
-│   └── NOTES.txt      # Post-install notes
-└── charts/            # Dependencies
-```
-
-```yaml
-# Chart.yaml
-apiVersion: v2
-name: my-chart
-description: A sample Helm chart
-type: application
-version: 0.1.0
-appVersion: "1.0.0"
+helm template my-nginx bitnami/nginx
+helm install my-nginx bitnami/nginx --dry-run
 ```
 
 ---
 
 ## 2.6 Kustomize
 
-Kustomize allows customization of Kubernetes YAML without templates.
-
 ```bash
-# Built into kubectl
+# Apply an overlay
 kubectl apply -k ./overlays/production
 kubectl kustomize ./overlays/production | kubectl apply -f -
 ```
-
-### Base Structure
 
 ```
 kustomize/
@@ -394,9 +294,6 @@ kustomize/
 │   ├── deployment.yaml
 │   └── service.yaml
 └── overlays/
-    ├── development/
-    │   ├── kustomization.yaml
-    │   └── patch-replicas.yaml
     └── production/
         ├── kustomization.yaml
         └── patch-replicas.yaml
@@ -417,80 +314,41 @@ commonLabels:
 # overlays/production/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-bases:
+resources:
 - ../../base
 namePrefix: prod-
 namespace: production
-patchesStrategicMerge:
-- patch-replicas.yaml
+replicas:
+- name: my-deployment
+  count: 5
 images:
 - name: nginx
   newTag: "1.25"
-```
-
-```yaml
-# overlays/production/patch-replicas.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: my-deployment
-spec:
-  replicas: 5
 ```
 
 ---
 
 ## 🧪 Practice Exercises
 
-### Exercise 2.1 - Rolling Update
-```bash
-# 1. Create deployment with nginx:1.23
-kubectl create deployment webapp --image=nginx:1.23 --replicas=4
+### Exercise 2.1 — Rolling Update
 
-# 2. Update to nginx:1.25
+```bash
+kubectl create deployment webapp --image=nginx:1.23 --replicas=4
 kubectl set image deployment/webapp nginx=nginx:1.25
 kubectl rollout status deployment/webapp
-
-# 3. Rollback to previous version
 kubectl rollout undo deployment/webapp
 kubectl rollout history deployment/webapp
 ```
 
-### Exercise 2.2 - Blue-Green
+### Exercise 2.2 — Helm
+
 ```bash
-# Create blue deployment
-kubectl create deployment myapp-blue \
-  --image=nginx:1.23 --replicas=3
-kubectl label pod -l app=myapp-blue version=blue
-
-# Create service pointing to blue
-kubectl expose deployment myapp-blue \
-  --name=myapp-svc --port=80
-
-# Create green, switch service
-kubectl create deployment myapp-green \
-  --image=nginx:1.25 --replicas=3
-kubectl patch svc myapp-svc \
-  -p '{"spec":{"selector":{"app":"myapp-green"}}}'
-```
-
-### Exercise 2.3 - Helm
-```bash
-# 1. Install WordPress using Helm
 helm repo add bitnami https://charts.bitnami.com/bitnami
 helm install my-wordpress bitnami/wordpress \
   --set wordpressUsername=admin \
   --set wordpressPassword=secret
-
-# 2. Check status
 helm status my-wordpress
-
-# 3. Upgrade with more replicas
-helm upgrade my-wordpress bitnami/wordpress \
-  --reuse-values \
-  --set replicaCount=2
-
-# 4. Uninstall
+helm upgrade my-wordpress bitnami/wordpress --reuse-values --set replicaCount=2
 helm uninstall my-wordpress
 ```
 
@@ -506,17 +364,12 @@ kubectl set image deployment/NAME CONTAINER=IMAGE:TAG
 kubectl rollout status deployment/NAME
 kubectl rollout history deployment/NAME
 kubectl rollout undo deployment/NAME [--to-revision=N]
-kubectl rollout pause deployment/NAME
-kubectl rollout resume deployment/NAME
 
 # Helm
-helm repo add NAME URL
-helm repo update
+helm repo add NAME URL && helm repo update
 helm install RELEASE CHART [--set key=value] [-f values.yaml]
 helm upgrade RELEASE CHART
 helm rollback RELEASE REVISION
 helm uninstall RELEASE
 helm list [-A]
-helm status RELEASE
 ```
-
